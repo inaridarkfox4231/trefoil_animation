@@ -3,11 +3,22 @@
 let baseGraph;
 let configBoard;
 let GRAPH_SIZE = 80;
-let DEFAULT_PERIOD = 360; // 6秒で1周が基本
+let MAX_SPEED = 8; // 1フレーム当たりの速度は8が最高
+let DEFAULT_SPEED = 3;
+let MIN_SPEED = 1; // で、1が最低。3がデフォルト。
 let x, y;
 let p;
 
 let config = {reverse:1, pause:2}; // フラグ操作
+let imageName = ['reverse', 'pause', 'start', 'accell', 'slow'];
+let images = {};
+
+function preload(){
+  imageName.forEach(function(name){
+    let image = loadImage("./assets/" + name + ".png");
+    images[name] = image;
+  })
+}
 
 function setup(){
   createCanvas(320, 480);
@@ -22,8 +33,6 @@ function draw(){
   background(220);
   image(baseGraph, 0, 0);
   image(configBoard, 0, 340);
-  fill(0); // 文字の色を黒に
-  drawTexts();
   translate(width / 2, height / 2);
   fill('blue'); // 動点の色は青
   noStroke(); // 動点の縁取りをなくす
@@ -50,15 +59,10 @@ function drawGraph(){
 
 function drawConfig(){
   configBoard.background(180);
-  configBoard.strokeWeight(2.0);
-  configBoard.fill(255, 202, 19);
-  configBoard.rect(20, 20, 130, 40);
-  configBoard.fill(240, 62, 70);
-  configBoard.rect(170, 20, 130, 40);
-  configBoard.fill(191, 111, 191);
-  configBoard.rect(20, 80, 130, 40);
-  configBoard.fill(114, 121, 218);
-  configBoard.rect(170, 80, 130, 40);
+  configBoard.image(images['reverse'], 20, 20);
+  configBoard.image(images['pause'], 170, 20);
+  configBoard.image(images['accell'], 20, 80);
+  configBoard.image(images['slow'], 170, 80);
 }
 
 function drawTexts(){
@@ -75,21 +79,34 @@ function trefoil_y(t){ return GRAPH_SIZE * (sin(t) + cos(2 * t)); }
 class movePoint{
   constructor(){
     this.frame = 0;
-    this.period = DEFAULT_PERIOD;
+    this.speed = DEFAULT_SPEED; // デフォルトスピード
     this.flag = 0 // 00で前進、10で前進ポーズ、01で後退、11で後退ポーズ
   }
   reverse(){ this.flag ^= config['reverse']; }
-  pause(){ this.flag ^= config['pause']; }
+  pause(){
+    this.flag ^= config['pause'];
+    if(this.flag & config['pause']){ configBoard.image(images['start'], 170, 20); }
+    else{ configBoard.image(images['pause'], 170, 20); } // 表示テキストの変更
+  }
   changeFrame(){
     if(this.flag & config['pause']){ return; }
-    if(this.flag & config['reverse']){ this.frame--; }
-    else{ this.frame++; }
+    if(this.flag & config['reverse']){
+      this.frame -= this.speed; }
+    else{
+      this.frame += this.speed;
+    }
   }
-  accell(){ this.period /= 2; this.frame /= 2; }
-  slow(){ this.period *= 2; this.frame *= 2; }
+  accell(){ // 加速
+    if(this.speed == MAX_SPEED){ return; }
+    this.speed++;
+  }
+  slow(){ // 減速
+    if(this.speed == MIN_SPEED){ return; }
+    this.speed--;
+  }
   display(){
     this.changeFrame();
-    let t = (this.frame / this.period) * 2 * PI;
+    let t = (this.frame / 360) * 2 * PI;
     ellipse(trefoil_x(t), -40 + trefoil_y(t), 10, 10);
   }
 }
@@ -98,8 +115,8 @@ class movePoint{
 function keyTyped(e){
   if(key === 'r'){ p.reverse(); } // 逆再生
   else if(key === 'p'){ p.pause(); } // ポーズ/ポーズ解除
-  else if(key === 'a'){ p.accell(); } // 2倍速
-  else if(key === 's'){ p.slow(); } // 0.5倍速
+  else if(key === 'a'){ p.accell(); } // 加速
+  else if(key === 's'){ p.slow(); } // 減速
 }
 
 // UIによる操作
@@ -114,5 +131,3 @@ function mouseClicked(){
 // 要求2: Rボタンで逆再生できるようにして。
 // 要求3: 加速、減速処理。
 // 要求4: タッチ操作でもそれをできるようにして。
-
-// reverseは30, 388. pauseは192, 387. accellは45, 451. slowは204, 450.
