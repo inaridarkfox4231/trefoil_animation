@@ -14,10 +14,10 @@ let imageName = ['reverse', 'pause', 'start', 'accell', 'slow'];
 let images = {};
 
 function preload(){
-  imageName.forEach(function(name){
-    let image = loadImage("./assets/" + name + ".png");
-    images[name] = image;
-  })
+  //imageName.forEach(function(name){
+  //  let image = loadImage("./assets/" + name + ".png");
+  //  images[name] = image;
+  //})
 }
 
 function setup(){
@@ -61,10 +61,10 @@ function drawGraph(){
 
 function drawConfig(){
   configBoard.background(180);
-  configBoard.image(images['reverse'], 20, 20);
-  configBoard.image(images['pause'], 170, 20);
-  configBoard.image(images['accell'], 20, 80);
-  configBoard.image(images['slow'], 170, 80);
+  //configBoard.image(images['reverse'], 20, 20);
+  //configBoard.image(images['pause'], 170, 20);
+  //configBoard.image(images['accell'], 20, 80);
+  //configBoard.image(images['slow'], 170, 80);
 }
 
 function drawTexts(){
@@ -87,8 +87,8 @@ class movePoint{
   reverse(){ this.flag ^= config['reverse']; }
   pause(){
     this.flag ^= config['pause'];
-    if(this.flag & config['pause']){ configBoard.image(images['start'], 170, 20); }
-    else{ configBoard.image(images['pause'], 170, 20); } // 表示テキストの変更
+    //if(this.flag & config['pause']){ configBoard.image(images['start'], 170, 20); }
+    //else{ configBoard.image(images['pause'], 170, 20); } // 表示テキストの変更
   }
   changeFrame(){
     if(this.flag & config['pause']){ return; }
