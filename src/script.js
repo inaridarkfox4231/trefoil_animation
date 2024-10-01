@@ -27,6 +27,8 @@ function setup(){
   configBoard = createGraphics(320, 140);
   drawConfig();
   p = new movePoint();
+  console.log(document.body.clientWidth);
+  console.log(document.body.clientHeight);
 }
 
 function draw(){
