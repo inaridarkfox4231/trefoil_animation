@@ -21,10 +21,12 @@ function preload(){
 }
 
 function setup(){
-  document.body.style.setProperty("width", window.screen.width + "px");
-  document.body.style.setProperty("height", window.screen.height + "px");
-  console.log("w:" + document.body.clientWidth);
-  console.log("h:" + document.body.clientHeight);
+  document.documentElement.style.setProperty("width", window.screen.width + "px");
+  document.documentElement.style.setProperty("height", window.screen.height + "px");
+  //document.body.style.setProperty("width", window.screen.width + "px");
+  //document.body.style.setProperty("height", window.screen.height + "px");
+  console.log("~~w:" + document.body.clientWidth);
+  console.log("~~h:" + document.body.clientHeight);
 
   createCanvas(320, 480);
   baseGraph = createGraphics(320, 480);
