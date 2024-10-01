@@ -21,14 +21,17 @@ function preload(){
 }
 
 function setup(){
+  document.body.style.setProperty("width", window.screen.width + "px");
+  document.body.style.setProperty("height", window.screen.height + "px");
+  console.log("w:" + document.body.clientWidth);
+  console.log("h:" + document.body.clientHeight);
+
   createCanvas(320, 480);
   baseGraph = createGraphics(320, 480);
   drawGraph();
   configBoard = createGraphics(320, 140);
   drawConfig();
   p = new movePoint();
-  console.log(document.body.clientWidth);
-  console.log(document.body.clientHeight);
 }
 
 function draw(){
