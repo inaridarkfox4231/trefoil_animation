@@ -21,12 +21,10 @@ function preload(){
 }
 
 function setup(){
-  document.documentElement.style.setProperty("width", window.screen.width + "px");
-  document.documentElement.style.setProperty("height", window.screen.height + "px");
-  //document.body.style.setProperty("width", window.screen.width + "px");
-  //document.body.style.setProperty("height", window.screen.height + "px");
-  console.log("~~w:" + document.body.clientWidth);
-  console.log("~~h:" + document.body.clientHeight);
+  //document.documentElement.style.setProperty("width", window.screen.width + "px");
+  //document.documentElement.style.setProperty("height", window.screen.height + "px");
+  document.body.style.setProperty("width", 320 + "px");
+  document.body.style.setProperty("height", 480 + "px");
 
   createCanvas(320, 480);
   baseGraph = createGraphics(320, 480);
@@ -44,6 +42,14 @@ function draw(){
   fill('blue'); // 動点の色は青
   noStroke(); // 動点の縁取りをなくす
   p.display();
+  fill(0);
+  textSize(16);
+  resetMatrix();
+  text(document.documentElement.clientWidth,5,400);
+  text(document.documentElement.clientHeight,5,420);
+
+  text(document.body.clientWidth,5,440);
+  text(document.body.clientHeight,5,460);
 }
 
 // グラフの作成
