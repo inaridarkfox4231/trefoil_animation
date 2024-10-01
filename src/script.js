@@ -26,6 +26,10 @@ function setup(){
   document.body.style.setProperty("width", 320 + "px");
   document.body.style.setProperty("height", 480 + "px");
 
+  const meta = document.getElementsByName("viewport")[0];
+  meta.setAttribute("content", "width=" + window.screen.width);
+  //console.log(meta.getAttribute("content"));
+
   createCanvas(320, 480);
   baseGraph = createGraphics(320, 480);
   drawGraph();
@@ -45,6 +49,7 @@ function draw(){
   fill(0);
   textSize(16);
   resetMatrix();
+  text(document.getElementsByName("viewport")[0].getAttribute("content"),5,380);
   text(document.documentElement.clientWidth,5,400);
   text(document.documentElement.clientHeight,5,420);
 
